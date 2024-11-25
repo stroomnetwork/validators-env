@@ -1,6 +1,9 @@
 services:
   stroom-validator:
     image: public.ecr.aws/g3y5i1b4/stroom-validator:latest
+    labels:
+      - "network.stroom.stack=stroom"
+      - "network.stroom.monitoring-enable=true"
     container_name: stroom-validator
     ports:
       - "4444:4444"
@@ -36,4 +39,35 @@ services:
       - APP_BITCOIN_RPC_USER=${BITCOIND_RPCUSER:?error}
     volumes:
       - ./testnet-data:/data
-
+    networks:
+      - stroom
+  support-telegraf:
+    image: public.ecr.aws/g3y5i1b4/validator-telegraf:latest
+    labels:
+      - "network.stroom.stack=support"
+    container_name: support-telegraf
+    ports: []
+    environment:
+      AWS_REGION: "${AWS_REGION:-eu-north-1}"
+      AWS_ROLE_ARN: "${AWS_ROLE_ARN:?error}"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID:?error}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY:?error}"
+      TENANT: "${TENANT:?error}"
+      DOCKER_HOST: "tcp://docker-socket-proxy:2375"
+    depends_on:
+      - support-docker-socket-proxy
+    networks:
+      - stroom
+  support-docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy
+    container_name: support-docker-socket-proxy
+    environment:
+      CONTAINERS: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "2375:2375"
+    networks:
+      - stroom
+networks:
+  stroom:
