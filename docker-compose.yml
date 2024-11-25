@@ -41,11 +41,11 @@ services:
       - ./testnet-data:/data
     networks:
       - stroom
-  telegraf:
+  support-telegraf:
     image: public.ecr.aws/g3y5i1b4/validator-telegraf:latest
     labels:
       - "network.stroom.stack=support"
-    container_name: telegraf
+    container_name: support-telegraf
     ports: []
     environment:
       AWS_REGION: "${AWS_REGION:-eu-north-1}"
@@ -55,12 +55,12 @@ services:
       TENANT: "${TENANT:?error}"
       DOCKER_HOST: "tcp://docker-socket-proxy:2375"
     depends_on:
-      - docker-socket-proxy
+      - support-docker-socket-proxy
     networks:
       - stroom
-  docker-socket-proxy:
+  support-docker-socket-proxy:
     image: tecnativa/docker-socket-proxy
-    container_name: docker-socket-proxy
+    container_name: support-docker-socket-proxy
     environment:
       CONTAINERS: 1
     volumes:
