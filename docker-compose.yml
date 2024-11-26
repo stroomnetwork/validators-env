@@ -23,7 +23,7 @@ services:
       - "--eth.contract-address.bstbtc=${BSTBTC_CONTRACT:-0xb6b8c974d5aeff82fba14489a353839e7a93b2b3}"
       - "--eth.contract-address.validator-registry=${VALIDATOR_REGISTRY_CONTRACT:-0x602f76f4e6b585f550b21706e93a7a674ce5ea00}"
       - "--eth.contract-address.user-activator=${USER_ACTIVATOR_CONTRACT:-0x2a998b721014a3453c29e56e7a0f6282e920bb42}"
-      - "--app.start-timeout=20m"
+      - "--app.start-timeout=30m"
       - "--node.frost-key-session-timeout=2s"
       - "--node.ethereum-network-name=sepolia"
       - "--node.bitcoin-network-name=${BITCOIN_CHAIN:-testnet4}"
