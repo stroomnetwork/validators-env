@@ -2,6 +2,7 @@ services:
   stroom-validator:
     image: public.ecr.aws/g3y5i1b4/stroom-validator:latest
     container_name: stroom-validator
+    pull_policy: always
     ports:
       - "4444:4444"
     command:
