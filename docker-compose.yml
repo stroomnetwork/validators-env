@@ -5,6 +5,7 @@ services:
     pull_policy: always
     ports:
       - "4444:4444"
+      - "8080:8080"
     command:
       - "--http.address=0.0.0.0:8080"
       - "--eth.rpc-url=${ETHEREUM_RPC_URL:?error}"
