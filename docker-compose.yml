@@ -33,7 +33,6 @@ services:
       # - "--node.peer-addresses=''"
       # - "--node.peer-addresses=''"
       # ### ###
-    environment:
     volumes:
       - ./testnet-data:/data
 
