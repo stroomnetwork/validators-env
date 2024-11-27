@@ -6,12 +6,12 @@ services:
       - "4444:4444"
     command:
       - "--http.address=0.0.0.0:8080"
-      - "--eth.rpc-url=${ETHEREUM_RPC_URL:-https://ethereum.testnetrvp.stroom.ninja:443}"
+      - "--eth.rpc-url=${ETHEREUM_RPC_URL:-https://ethereum.testnet.stroom.ninja:443}"
       - "--node.approval-threshold=${APPROVAL_THRESHOLD}"
       - "--node.listen-address=0.0.0.0:4444"
       - "--node.state-storage-dir=/data/stroom"
       - "--wallet.appdata=/data/btcwallet"
-      - "--bitcoin.host=${BITCOIN_RPC_HOST:-bitcoin.testnetrvp.stroom.ninja:48332}"
+      - "--bitcoin.host=${BITCOIN_RPC_HOST:-bitcoin.testnetv2.stroom.ninja:48332}"
       - "--bitcoin.vendor=bitcoind"
       - "--bitcoin.chain=${BITCOIN_CHAIN:-testnet4}"
       - "--eth.watch.finalization-depth=3"
@@ -32,6 +32,7 @@ services:
       # - "--node.peer-addresses=''"
       # ### ###
     environment:
+      - APP_BITCOIN_PRC_PASSWORD=${BITCOIND_RPCPASSWORD:?error}
       - APP_BITCOIN_RPC_PASSWORD=${BITCOIND_RPCPASSWORD:?error}
       - APP_BITCOIN_RPC_USER=${BITCOIND_RPCUSER:?error}
     volumes:
