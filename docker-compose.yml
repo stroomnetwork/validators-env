@@ -6,14 +6,16 @@ services:
       - "4444:4444"
     command:
       - "--http.address=0.0.0.0:8080"
-      - "--eth.rpc-url=${ETHEREUM_RPC_URL:-https://ethereum.testnet.stroom.ninja:443}"
-      - "--node.approval-threshold=${APPROVAL_THRESHOLD}"
+      - "--eth.rpc-url=${ETHEREUM_RPC_URL:?error}"
+      - "--node.approval-threshold=${APPROVAL_THRESHOLD:?error}"
       - "--node.listen-address=0.0.0.0:4444"
       - "--node.state-storage-dir=/data/stroom"
       - "--wallet.appdata=/data/btcwallet"
-      - "--bitcoin.host=${BITCOIN_RPC_HOST:-bitcoin.testnetv2.stroom.ninja:48332}"
+      - "--bitcoin.host=${BITCOIN_RPC_HOST:?error}"
+      - "--bitcoin.user=${BITCOIN_RPC_USER:?error}"
+      - "--bitcoin.password=${BITCOIN_RPC_PASSWORD:?error}"
       - "--bitcoin.vendor=bitcoind"
-      - "--bitcoin.chain=${BITCOIN_CHAIN:-testnet4}"
+      - "--bitcoin.chain=${BITCOIN_CHAIN:?error}"
       - "--eth.watch.finalization-depth=3"
       - "--bitcoin.watch.finalization-depth=3"
       - "--eth.watch.start-height=${ETHEREUM_START_HEIGHT:?error}"
@@ -32,9 +34,6 @@ services:
       # - "--node.peer-addresses=''"
       # ### ###
     environment:
-      - APP_BITCOIN_PRC_PASSWORD=${BITCOIND_RPCPASSWORD:?error}
-      - APP_BITCOIN_RPC_PASSWORD=${BITCOIND_RPCPASSWORD:?error}
-      - APP_BITCOIN_RPC_USER=${BITCOIND_RPCUSER:?error}
     volumes:
       - ./testnet-data:/data
 
