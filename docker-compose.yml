@@ -6,7 +6,7 @@ services:
     ports:
       - "4444:4444"
       - "8080:8080"
-#      - "8081:8081"
+      - "127.0.0.1:8081:8081"
     command:
       - "--http.address=0.0.0.0:8080"
       - "--eth.rpc-url=${ETHEREUM_RPC_URL:?error}"
@@ -37,5 +37,7 @@ services:
       # - "--node.peer-addresses=''"
       # ### ###
     volumes:
-      - ./testnet-data:/data
+      - testnet-data:/data
 
+volumes:
+  testnet-data:
