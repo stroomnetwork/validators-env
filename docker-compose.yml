@@ -5,43 +5,46 @@ services:
       - "network.stroom.stack=stroom"
       - "network.stroom.monitoring-enable=true"
     container_name: stroom-validator
+    pull_policy: always
     ports:
       - "4444:4444"
+      - "8080:8080"
+      - "127.0.0.1:8081:8081"
     command:
       - "--http.address=0.0.0.0:8080"
-      - "--eth.rpc-url=${ETHEREUM_RPC_URL:-https://ethereum.testnetrvp.stroom.ninja:443}"
-      - "--node.approval-threshold=${APPROVAL_THRESHOLD}"
+      - "--eth.rpc-url=${ETHEREUM_RPC_URL:?error}"
+      - "--node.approval-threshold=${APPROVAL_THRESHOLD:?error}"
       - "--node.listen-address=0.0.0.0:4444"
       - "--node.state-storage-dir=/data/stroom"
       - "--wallet.appdata=/data/btcwallet"
-      - "--bitcoin.host=${BITCOIN_RPC_HOST:-bitcoin.testnetrvp.stroom.ninja:48332}"
+      - "--bitcoin.host=${BITCOIN_RPC_HOST:?error}"
+      - "--bitcoin.user=${BITCOIN_RPC_USER:?error}"
+      - "--bitcoin.password=${BITCOIN_RPC_PASSWORD:?error}"
       - "--bitcoin.vendor=bitcoind"
-      - "--bitcoin.chain=${BITCOIN_CHAIN:-testnet4}"
+      - "--bitcoin.chain=${BITCOIN_CHAIN:?error}"
       - "--eth.watch.finalization-depth=3"
       - "--bitcoin.watch.finalization-depth=3"
-      - "--eth.watch.start-height=${ETHEREUM_START_HIGHT:?error}"
-      - "--bitcoin.watch.start-height=${BITCOIN_START_HIGHT:?error}"
+      - "--eth.watch.start-height=${ETHEREUM_START_HEIGHT:?error}"
+      - "--bitcoin.watch.start-height=${BITCOIN_START_HEIGHT:?error}"
       - "--node.private-key=${NODE_PRIVATE_KEY:?error}"
-      - "--eth.contract-address.stbtc=${STBTC_CONTRACT:-0xa8f5f8a159e3270453a3411986e2c12415365a5a}"
-      - "--eth.contract-address.bstbtc=${BSTBTC_CONTRACT:-0xb6b8c974d5aeff82fba14489a353839e7a93b2b3}"
-      - "--eth.contract-address.validator-registry=${VALIDATOR_REGISTRY_CONTRACT:-0x602f76f4e6b585f550b21706e93a7a674ce5ea00}"
-      - "--eth.contract-address.user-activator=${USER_ACTIVATOR_CONTRACT:-0x2a998b721014a3453c29e56e7a0f6282e920bb42}"
-      - "--app.start-timeout=20m"
-      - "--node.frost-key-session-timeout=2s"
+      - "--eth.contract-address.stbtc=${STBTC_CONTRACT:-0x02a416f9ad9297dde0bb98f0cdb8b7ad5fbb0c36}"
+      - "--eth.contract-address.bstbtc=${BSTBTC_CONTRACT:-0xf0ccae6d128c91d338f3910412be5ba7d5dcd039}"
+      - "--eth.contract-address.validator-registry=${VALIDATOR_REGISTRY_CONTRACT:-0x4bc2e3026ba0c088501a705f37fb34e5d63c06b8}"
+      - "--eth.contract-address.user-activator=${USER_ACTIVATOR_CONTRACT:-0x29c9d9b032db66fe4b4d4ec9071262714744b448}"
+      - "--app.start-timeout=30m"
+      - "--node.frost-key-session-timeout=5s"
       - "--node.ethereum-network-name=sepolia"
       - "--node.bitcoin-network-name=${BITCOIN_CHAIN:-testnet4}"
       # ### NODE PEER ADDRESSES here ###
       # - "--node.peer-addresses=''"
       # - "--node.peer-addresses=''"
       # ### ###
-    environment:
-      - APP_BITCOIN_PRC_PASSWORD=${BITCOIND_RPCPASSWORD:?error}
-      - APP_BITCOIN_RPC_USER=${BITCOIND_RPCUSER:?error}
     volumes:
-      - ./testnet-data:/data
+      - testnet-data:/data
     networks:
       - stroom
-  support-telegraf:
+
+  support.telegraf:
     image: public.ecr.aws/g3y5i1b4/validator-telegraf:latest
     labels:
       - "network.stroom.stack=support"
@@ -71,3 +74,6 @@ services:
       - stroom
 networks:
   stroom:
+
+volumes:
+  testnet-data:
