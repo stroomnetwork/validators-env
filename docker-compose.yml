@@ -1,6 +1,6 @@
 services:
   stroom-validator:
-    image: public.ecr.aws/g3y5i1b4/stroom-validator:latest
+    image: public.ecr.aws/g3y5i1b4/stroom-validator:${APP_VERSION:?error}
     labels:
       - "network.stroom.stack=stroom"
       - "network.stroom.monitoring-enable=true"
@@ -52,11 +52,11 @@ services:
     ports: []
     environment:
       AWS_REGION: "${AWS_REGION:-eu-north-1}"
-      AWS_ROLE_ARN: "${AWS_ROLE_ARN:?error}"
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID:?error}"
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY:?error}"
       TENANT: "${TENANT:?error}"
       DOCKER_HOST: "tcp://docker-socket-proxy:2375"
+      LOG_GROUP_NAME: "${LOG_GROUP_NAME:?error}"
     depends_on:
       - support-docker-socket-proxy
     networks:
