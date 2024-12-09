@@ -50,10 +50,13 @@ services:
       - "network.stroom.stack=support"
     container_name: support-telegraf
     ports: []
+    env_file:
+      - ./.env
     environment:
       AWS_REGION: "${AWS_REGION:-eu-north-1}"
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID:?error}"
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY:?error}"
+      AWS_ROLE_ARN: "${AWS_ROLE_ARN:?error}"
       TENANT: "${TENANT:?error}"
       DOCKER_HOST: "tcp://docker-socket-proxy:2375"
       LOG_GROUP_NAME: "${LOG_GROUP_NAME:?error}"
