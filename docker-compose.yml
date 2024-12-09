@@ -35,6 +35,7 @@ services:
       - "--node.frost-key-session-timeout=5s"
       - "--node.ethereum-network-name=sepolia"
       - "--node.bitcoin-network-name=${BITCOIN_CHAIN:-testnet4}"
+      - "--app.log-level=${LOG_LEVEL:?error}"
       # ### NODE PEER ADDRESSES here ###
       # - "--node.peer-addresses=''"
       # - "--node.peer-addresses=''"
@@ -43,6 +44,10 @@ services:
       - testnet-data:/data
     networks:
       - stroom
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
 
   support.telegraf:
     image: public.ecr.aws/g3y5i1b4/validator-telegraf:latest
@@ -64,6 +69,10 @@ services:
       - support-docker-socket-proxy
     networks:
       - stroom
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
   support-docker-socket-proxy:
     image: tecnativa/docker-socket-proxy
     container_name: support-docker-socket-proxy
@@ -75,6 +84,10 @@ services:
       - "2375:2375"
     networks:
       - stroom
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
 networks:
   stroom:
 
