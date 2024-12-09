@@ -58,7 +58,7 @@ services:
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY:?error}"
       AWS_ROLE_ARN: "${AWS_ROLE_ARN:?error}"
       TENANT: "${TENANT:?error}"
-      DOCKER_HOST: "tcp://docker-socket-proxy:2375"
+      DOCKER_HOST: "tcp://support-docker-socket-proxy:2375"
       LOG_GROUP_NAME: "${LOG_GROUP_NAME:?error}"
     depends_on:
       - support-docker-socket-proxy
