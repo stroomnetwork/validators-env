@@ -15,9 +15,10 @@ services:
       - "--eth.rpc-url=${ETHEREUM_RPC_URL:?error}"
       - "--node.approval-threshold=${APPROVAL_THRESHOLD:?error}"
       - "--node.listen-address=0.0.0.0:4444"
+      - "--node.init-network"
       - "--node.state-storage-dir=/data/stroom"
       - "--wallet.appdata=/data/btcwallet"
-      - "--bitcoin.host=${BITCOIN_RPC_HOST:?error}"
+      - "--bitcoin.host=support-bitcoind-proxy:80"
       - "--bitcoin.user=${BITCOIN_RPC_USER:?error}"
       - "--bitcoin.password=${BITCOIN_RPC_PASSWORD:?error}"
       - "--bitcoin.vendor=bitcoind"
@@ -43,6 +44,10 @@ services:
       - testnet-data:/data
     networks:
       - stroom
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
 
   support.telegraf:
     image: public.ecr.aws/g3y5i1b4/validator-telegraf:latest
@@ -64,6 +69,10 @@ services:
       - support-docker-socket-proxy
     networks:
       - stroom
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
   support-docker-socket-proxy:
     image: tecnativa/docker-socket-proxy
     container_name: support-docker-socket-proxy
@@ -73,6 +82,17 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - stroom
+  support-bitcoind-proxy:
+    image: public.ecr.aws/g3y5i1b4/bitcoind-proxy:latest
+    container_name: support-bitcoind-proxy
+    environment:
+      BITCOIND_URL: ${BITCOIND_URL:?error}
+    networks:
+      - stroom
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
 networks:
   stroom:
 
