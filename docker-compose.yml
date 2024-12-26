@@ -35,6 +35,7 @@ services:
       - "--node.frost-key-session-timeout=5s"
       - "--node.ethereum-network-name=sepolia"
       - "--node.bitcoin-network-name=${BITCOIN_CHAIN:-testnet4}"
+      - "--wallet.rescan-start-block=${BITCOIN_START_HEIGHT:?error}"
       # ### NODE PEER ADDRESSES here ###
       # - "--node.peer-addresses=''"
       # - "--node.peer-addresses=''"
